@@ -1,0 +1,49 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:DDTest.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="DDTest.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="DDTest">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <Grid ColumnDefinitions="*" RowDefinitions="Auto *">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10 ">
+            <TextBox Watermark="Search...."
+                     Text="{Binding SearchQuery}"
+                     Width="400"/>
+            <Button Content="Refresh"
+                    Margin="5 0 0 0"
+                    Command="{Binding LoadCommand}"/>
+        </StackPanel>
+        <TreeDataGrid Grid.Row="1"
+                      CanUserSortColumns="False"
+                      Source="{Binding Source}">
+            <TreeDataGrid.Styles>
+                <Style Selector="TreeDataGridRow">
+                    <Setter Property="ContextFlyout">
+                        <MenuFlyout x:DataType="vm:ItemViewModel">
+                            <MenuItem Header="Change name"
+                                      Command="{Binding ChangeName}"/>
+                        </MenuFlyout>
+                    </Setter>
+                </Style>
+            </TreeDataGrid.Styles>
+        </TreeDataGrid>
+        <Panel Grid.Row="0" Grid.RowSpan="2" 
+               Opacity="0.5" 
+               Background="White" 
+               IsVisible="{Binding IsLoading}">
+            <ProgressBar Width="500" IsIndeterminate="True"/>
+        </Panel>
+    </Grid>
+
+</Window>
